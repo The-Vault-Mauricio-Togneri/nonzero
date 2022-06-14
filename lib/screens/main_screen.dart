@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
 import 'package:nonzero/dialogs/confirmation_dialog.dart';
@@ -7,8 +6,6 @@ import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/services/url_launcher.dart';
 import 'package:nonzero/storage/last_restart_storage.dart';
-import 'package:nonzero/storage/tasks_storage.dart';
-import 'package:nonzero/types/priority.dart';
 import 'package:nonzero/widgets/label.dart';
 import 'package:nonzero/widgets/run_once.dart';
 
@@ -29,20 +26,6 @@ class MainScreen extends StatelessWidget {
               color: Palette.white,
               size: 16,
             ),
-            actions: [
-              IconButton(
-                onPressed: () => state.onDownload(context),
-                icon: const Icon(Icons.download),
-              ),
-              IconButton(
-                onPressed: () => state.onReset(context),
-                icon: const Icon(Icons.restart_alt_rounded),
-              ),
-              IconButton(
-                onPressed: state.onOpenSheet,
-                icon: const Icon(Icons.open_in_new),
-              ),
-            ],
           ),
           body: Content(state),
         ),
@@ -112,9 +95,8 @@ class MainState extends BaseState {
 
   Future load(BuildContext context) async {
     tasks.addAll(await Repository.tasks());
-    notify();
 
-    final DateTime lastRestart = await LastRestartStorage.load();
+    /*final DateTime lastRestart = await LastRestartStorage.load();
 
     if (DateTime.now().day > lastRestart.day) {
       ConfirmationDialog.show(
@@ -125,55 +107,28 @@ class MainState extends BaseState {
           _downloadData(context);
         },
       );
-    }
+    }*/
 
-    /*final user = <String, dynamic>{
-      'name': 'Item 1',
-      'priority': 'medium',
-    };
-
-    await FirebaseFirestore.instance.collection('mauricio.togneri@gmail.com').add(user);*/
-
-    final result = await FirebaseFirestore.instance.collection('mauricio.togneri@gmail.com').get();
-
-    for (final doc in result.docs) {
-      print('${doc.id} => ${doc.data()}');
-    }
+    notify();
   }
 
   void onTaskSelected(Task task) {
     task.toggle();
     tasks.sort((a, b) => a.compareTo(b));
     notify();
-
-    TasksStorage.save(tasks);
   }
 
-  void onDownload(BuildContext context) => ConfirmationDialog.show(
-        context: context,
-        message: 'Download data?',
-        callback: () => _downloadData(context),
-      );
-
-  void onReset(BuildContext context) => ConfirmationDialog.show(
-        context: context,
-        message: 'Reset progress?',
-        callback: _applyReset,
-      );
-
-  void _applyReset() {
+  /*void _applyReset() {
     for (final Task task in tasks) {
       task.completed = false;
     }
     tasks.sort((a, b) => a.compareTo(b));
     notify();
-    TasksStorage.save(tasks);
-  }
+  }*/
 
   void _downloadData(BuildContext context) {
     tasks.clear();
     notify();
-    Repository.reset();
     load(context);
   }
 

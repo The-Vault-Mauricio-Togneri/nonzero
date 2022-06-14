@@ -1,19 +1,16 @@
-import 'dart:convert';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:nonzero/types/priority.dart';
 
-part 'task.g.dart';
-
-@JsonSerializable()
 class Task implements Comparable<Task> {
+  final String id;
   final String name;
   final Priority priority;
   bool completed;
 
   Task({
+    required this.id,
     required this.name,
     required this.priority,
-    this.completed = false,
+    required this.completed,
   });
 
   void toggle() => completed = !completed;
@@ -30,22 +27,4 @@ class Task implements Comparable<Task> {
       return priority.index - other.priority.index;
     }
   }
-
-  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
-
-  static List<Task> fromList(String json) {
-    final List<dynamic> list = jsonDecode(json);
-
-    final List<Task> result = [];
-
-    for (final dynamic entry in list) {
-      result.add(Task.fromJson(entry));
-    }
-
-    result.sort((a, b) => a.compareTo(b));
-
-    return result;
-  }
-
-  Map<String, dynamic> toJson() => _$TaskToJson(this);
 }

@@ -1,30 +1,34 @@
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nonzero/models/task.dart';
-import 'package:nonzero/storage/tasks_storage.dart';
+import 'package:nonzero/types/priority.dart';
 
 class Repository {
+  static const String USER_ID = 'mauricio.togneri@gmail.com';
+
   static Future<List<Task>> tasks() async {
-    final List<Task> tasks = await _fromDisk();
+    final List<Task> tasks = [];
+    final result = await FirebaseFirestore.instance.collection(USER_ID).get();
 
-    if (tasks.isNotEmpty) {
-      return tasks;
-    } else {
-      tasks.addAll(await _fromNetwork());
-      await TasksStorage.save(tasks);
+    for (final doc in result.docs) {
+      final map = doc.data();
 
-      return tasks;
+      tasks.add(Task(
+        id: doc.id,
+        name: map['name'],
+        priority: Priority.parse(map['priority']),
+        completed: map['completed'] as bool,
+      ));
     }
+
+    return tasks;
   }
 
-  static Future<List<Task>> _fromDisk() => TasksStorage.load();
+  static Future add(Task task) async {
+    final document = <String, dynamic>{
+      'name': task.name,
+      'priority': task.priority.name,
+    };
 
-  static Future<List<Task>> _fromNetwork() async {
-    final Uri url = Uri.parse('https://script.google.com/macros/s/AKfycbyLgwV-hjwYwmyHoP0c2PIADzh-r0uvN5we6pea7bOYJsGkXPQDzPoJuRRdrq6i_u3yag/exec');
-    final Response response = await http.get(url);
-
-    return Task.fromList(response.body);
+    await FirebaseFirestore.instance.collection(USER_ID).add(document);
   }
-
-  static Future reset() => TasksStorage.clear();
 }
