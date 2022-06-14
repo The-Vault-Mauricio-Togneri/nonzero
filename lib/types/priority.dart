@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nonzero/services/localizations.dart';
 
 enum Priority {
   high,
@@ -13,6 +14,17 @@ enum Priority {
         return const Color(0xFFecc081);
       case Priority.low:
         return const Color(0xFFfa928d);
+    }
+  }
+
+  String get text {
+    switch (this) {
+      case Priority.high:
+        return Localized.get.priorityHigh;
+      case Priority.medium:
+        return Localized.get.priorityMedium;
+      case Priority.low:
+        return Localized.get.priorityLow;
     }
   }
 

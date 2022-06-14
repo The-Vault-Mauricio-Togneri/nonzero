@@ -126,7 +126,7 @@ class PrioritySelector extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: Center(
                 child: Label(
-                  text: priority.name[0].toUpperCase() + priority.name.substring(1),
+                  text: priority.text,
                   color: Palette.white,
                 ),
               ),

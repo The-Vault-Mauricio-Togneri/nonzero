@@ -20,6 +20,12 @@ abstract class BaseLocalized {
 
   String get optionUpdate;
 
+  String get priorityHigh;
+
+  String get priorityLow;
+
+  String get priorityMedium;
+
   String get taskButtonAdd;
 
   String get taskButtonUpdate;
@@ -58,6 +64,15 @@ class ENLocalized extends BaseLocalized {
 
   @override
   String get optionUpdate => 'Update';
+
+  @override
+  String get priorityHigh => 'High';
+
+  @override
+  String get priorityLow => 'Low';
+
+  @override
+  String get priorityMedium => 'Medium';
 
   @override
   String get taskButtonAdd => 'Add';
@@ -102,6 +117,15 @@ class ESLocalized extends BaseLocalized {
 
   @override
   String get optionUpdate => 'Actualizar';
+
+  @override
+  String get priorityHigh => 'Alta';
+
+  @override
+  String get priorityLow => 'Baja';
+
+  @override
+  String get priorityMedium => 'Media';
 
   @override
   String get taskButtonAdd => 'Agregar';
