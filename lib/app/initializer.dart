@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/routes.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -15,6 +16,8 @@ class Initializer {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Palette.transparent,
     ));
+
+    setPathUrlStrategy();
 
     getIt.registerSingleton<Routes>(Routes());
   }

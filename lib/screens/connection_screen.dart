@@ -33,8 +33,8 @@ class SignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 100),
+      child: SizedBox(
+        width: 150,
         child: CustomButton(
           text: Localized.get.connectionSignIn,
           onPressed: state.onSignIn,
