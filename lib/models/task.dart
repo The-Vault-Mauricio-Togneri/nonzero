@@ -13,6 +13,12 @@ class Task implements Comparable<Task> {
     required this.completed,
   });
 
+  Map<String, dynamic> get document => <String, dynamic>{
+        'name': name,
+        'priority': priority.name,
+        'completed': completed,
+      };
+
   void toggle() => completed = !completed;
 
   @override

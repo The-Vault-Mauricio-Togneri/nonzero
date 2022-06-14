@@ -23,12 +23,7 @@ class Repository {
     return tasks;
   }
 
-  static Future add(Task task) async {
-    final document = <String, dynamic>{
-      'name': task.name,
-      'priority': task.priority.name,
-    };
+  static Future add(Task task) => FirebaseFirestore.instance.collection(USER_ID).add(task.document);
 
-    await FirebaseFirestore.instance.collection(USER_ID).add(document);
-  }
+  static Future update(Task task) => FirebaseFirestore.instance.collection(USER_ID).doc(task.id).set(task.document);
 }

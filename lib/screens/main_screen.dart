@@ -1,10 +1,8 @@
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
-import 'package:nonzero/dialogs/confirmation_dialog.dart';
 import 'package:nonzero/models/task.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
-import 'package:nonzero/services/url_launcher.dart';
 import 'package:nonzero/storage/last_restart_storage.dart';
 import 'package:nonzero/widgets/label.dart';
 import 'package:nonzero/widgets/run_once.dart';
@@ -96,41 +94,23 @@ class MainState extends BaseState {
   Future load(BuildContext context) async {
     tasks.addAll(await Repository.tasks());
 
-    /*final DateTime lastRestart = await LastRestartStorage.load();
+    final DateTime lastRestart = await LastRestartStorage.load();
 
     if (DateTime.now().day > lastRestart.day) {
-      ConfirmationDialog.show(
-        context: context,
-        message: 'Restart progress?',
-        callback: () async {
-          await LastRestartStorage.save();
-          _downloadData(context);
-        },
-      );
-    }*/
+      for (final Task task in tasks) {
+        task.completed = false;
+        Repository.update(task);
+      }
+      tasks.sort((a, b) => a.compareTo(b));
+    }
 
     notify();
   }
 
   void onTaskSelected(Task task) {
     task.toggle();
+    Repository.update(task);
     tasks.sort((a, b) => a.compareTo(b));
     notify();
   }
-
-  /*void _applyReset() {
-    for (final Task task in tasks) {
-      task.completed = false;
-    }
-    tasks.sort((a, b) => a.compareTo(b));
-    notify();
-  }*/
-
-  void _downloadData(BuildContext context) {
-    tasks.clear();
-    notify();
-    load(context);
-  }
-
-  void onOpenSheet() => UrlLauncher.open('https://docs.google.com/spreadsheets/d/18fO4L8m7dVfzA74YMOHbjYOFCxuvZGrPhfhCMS6DUFE/edit');
 }
