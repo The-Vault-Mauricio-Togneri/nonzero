@@ -6,6 +6,8 @@ class Routes {
 
   final GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
 
+  static BuildContext context() => get.key.currentContext!;
+
   static void backTo(RoutePredicate predicate) => get.key.currentState?.popUntil(predicate);
 
   static void pop<T>([T? result]) => get.key.currentState?.pop(result);

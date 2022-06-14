@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nonzero/services/routes.dart';
 
 class ConfirmationDialog {
-  static void show({
+  static Future<bool?> show({
     required BuildContext context,
     required String message,
-    required VoidCallback callback,
+    VoidCallback? callback,
   }) {
-    showDialog(
+    return showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           content: Text(message),
           actions: [
@@ -19,8 +19,8 @@ class ConfirmationDialog {
             ),
             TextButton(
               onPressed: () {
-                Routes.pop();
-                callback();
+                Routes.pop(true);
+                callback?.call();
               },
               child: Text('Ok'.toUpperCase()),
             ),

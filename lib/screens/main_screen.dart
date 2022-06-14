@@ -1,8 +1,11 @@
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
+import 'package:nonzero/dialogs/confirmation_dialog.dart';
 import 'package:nonzero/models/task.dart';
+import 'package:nonzero/screens/edit_screen.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
+import 'package:nonzero/services/routes.dart';
 import 'package:nonzero/storage/last_restart_storage.dart';
 import 'package:nonzero/widgets/label.dart';
 
@@ -25,6 +28,10 @@ class MainScreen extends StatelessWidget {
             ),
           ),
           body: Content(state),
+          floatingActionButton: FloatingActionButton(
+            onPressed: state.onAddTask,
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
@@ -88,20 +95,80 @@ class TaskEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: !task.completed ? task.priority.color : Palette.lightGrey,
-      child: Material(
-        color: Palette.transparent,
-        child: InkWell(
-          onTap: () => state.onTaskSelected(task),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 17, 12, 17),
-            child: Label(
-              text: task.name,
-              size: 12,
-              color: task.completed ? Palette.darkGrey : Palette.black,
-              decoration: task.completed ? TextDecoration.lineThrough : null,
+    return Dismissible(
+      key: UniqueKey(),
+      background: const DismissibleBackground(
+        color: Colors.green,
+        alignment: Alignment.centerLeft,
+        icon: Icons.check,
+      ),
+      secondaryBackground: const DismissibleBackground(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        icon: Icons.delete,
+      ),
+      onDismissed: (direction) {
+        if (direction == DismissDirection.endToStart) {
+          state.onTaskDeleted(task);
+        } else {
+          state.onTaskSelected(task);
+        }
+      },
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.endToStart) {
+          return ConfirmationDialog.show(
+            context: context,
+            message: 'Delete task?',
+          );
+        } else {
+          return true;
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        color: !task.completed ? task.priority.color : Palette.lightGrey,
+        child: Material(
+          color: Palette.transparent,
+          child: InkWell(
+            onTap: () => state.onTaskSelected(task),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 17, 12, 17),
+              child: Label(
+                text: task.name,
+                size: 12,
+                color: task.completed ? Palette.darkGrey : Palette.black,
+                decoration: task.completed ? TextDecoration.lineThrough : null,
+              ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DismissibleBackground extends StatelessWidget {
+  final Color color;
+  final Alignment alignment;
+  final IconData icon;
+
+  const DismissibleBackground({
+    required this.color,
+    required this.alignment,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color,
+      child: Align(
+        alignment: alignment,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(
+            icon,
+            color: Colors.white,
           ),
         ),
       ),
@@ -142,5 +209,17 @@ class MainState extends BaseState {
     Repository.update(task);
     tasks.sort((a, b) => a.compareTo(b));
     notify();
+  }
+
+  void onTaskDeleted(Task task) {
+    tasks.remove(task);
+    Repository.delete(task);
+    tasks.sort((a, b) => a.compareTo(b));
+    notify();
+  }
+
+  Future onAddTask() async {
+    await Routes.push(EditScreen.instance());
+    load();
   }
 }

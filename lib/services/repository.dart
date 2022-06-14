@@ -23,7 +23,18 @@ class Repository {
     return tasks;
   }
 
-  static Future add(Task task) => FirebaseFirestore.instance.collection(USER_ID).add(task.document);
+  static Future<Task> add(Task task) async {
+    final document = await FirebaseFirestore.instance.collection(USER_ID).add(task.document);
+
+    return Task(
+      id: document.id,
+      name: task.name,
+      priority: task.priority,
+      completed: task.completed,
+    );
+  }
 
   static Future update(Task task) => FirebaseFirestore.instance.collection(USER_ID).doc(task.id).set(task.document);
+
+  static Future delete(Task task) => FirebaseFirestore.instance.collection(USER_ID).doc(task.id).delete();
 }
