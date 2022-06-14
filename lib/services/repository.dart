@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nonzero/models/task.dart';
 
 class Repository {
-  static const String USER_ID = 'mauricio.togneri@gmail.com';
-
   static Future<List<Task>> tasks() async {
     final List<Task> tasks = [];
-    final result = await FirebaseFirestore.instance.collection(USER_ID).get();
+    final result = await collection().get();
 
     for (final document in result.docs) {
       tasks.add(Task.fromDocument(document));
@@ -16,7 +15,7 @@ class Repository {
   }
 
   static Future<Task> add(Task task) async {
-    final document = await FirebaseFirestore.instance.collection(USER_ID).add(task.document);
+    final document = await collection().add(task.document);
 
     return Task(
       id: document.id,
@@ -26,7 +25,9 @@ class Repository {
     );
   }
 
-  static Future update(Task task) => FirebaseFirestore.instance.collection(USER_ID).doc(task.id).set(task.document);
+  static Future update(Task task) => collection().doc(task.id).set(task.document);
 
-  static Future delete(Task task) => FirebaseFirestore.instance.collection(USER_ID).doc(task.id).delete();
+  static Future delete(Task task) => collection().doc(task.id).delete();
+
+  static CollectionReference<Map<String, dynamic>> collection() => FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser!.uid);
 }

@@ -8,6 +8,7 @@ environment:
 dependencies:
   get_it: ^7.2.0
   dafluta: ^3.4.0
+  google_sign_in: ^5.3.3
   shared_preferences: ^2.0.15
   
   firebase_core: ^1.17.1
@@ -18,6 +19,7 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter 
+  firebase_auth: ^3.3.19
 
 dev_dependencies:
   dalocale: ^2.4.1
