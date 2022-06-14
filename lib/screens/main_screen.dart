@@ -5,7 +5,6 @@ import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/storage/last_restart_storage.dart';
 import 'package:nonzero/widgets/label.dart';
-import 'package:nonzero/widgets/run_once.dart';
 
 class MainScreen extends StatelessWidget {
   final MainState state = MainState();
@@ -39,32 +38,53 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RunOnce(
-      function: () => state.load(context),
-      child: StateProvider<MainState>(
+    return StateProvider<MainState>(
+      state: state,
+      builder: (context, state) => state.tasks.isEmpty ? const Waiting() : TaskList(state),
+    );
+  }
+}
+
+class Waiting extends StatelessWidget {
+  const Waiting();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class TaskList extends StatelessWidget {
+  final MainState state;
+
+  const TaskList(this.state);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: state.tasks.length,
+      itemBuilder: (context, index) => TaskEntry(
         state: state,
-        builder: (context, state) => state.tasks.isEmpty
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.separated(
-                itemCount: state.tasks.length,
-                itemBuilder: (context, index) => TaskLine(state, state.tasks[index]),
-                separatorBuilder: (context, index) => const HorizontalDivider(
-                  height: 0.1,
-                  color: Palette.black,
-                ),
-              ),
+        task: state.tasks[index],
+      ),
+      separatorBuilder: (context, index) => const HorizontalDivider(
+        height: 0.1,
+        color: Palette.black,
       ),
     );
   }
 }
 
-class TaskLine extends StatelessWidget {
+class TaskEntry extends StatelessWidget {
   final MainState state;
   final Task task;
 
-  const TaskLine(this.state, this.task);
+  const TaskEntry({
+    required this.state,
+    required this.task,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +95,10 @@ class TaskLine extends StatelessWidget {
         child: InkWell(
           onTap: () => state.onTaskSelected(task),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+            padding: const EdgeInsets.fromLTRB(12, 17, 12, 17),
             child: Label(
               text: task.name,
+              size: 12,
               color: task.completed ? Palette.darkGrey : Palette.black,
               decoration: task.completed ? TextDecoration.lineThrough : null,
             ),
@@ -91,19 +112,28 @@ class TaskLine extends StatelessWidget {
 class MainState extends BaseState {
   final List<Task> tasks = [];
 
-  Future load(BuildContext context) async {
+  MainState() {
+    load();
+  }
+
+  Future load() async {
+    tasks.clear();
+    notify();
+
     tasks.addAll(await Repository.tasks());
 
     final DateTime lastRestart = await LastRestartStorage.load();
 
-    if (DateTime.now().day > lastRestart.day) {
+    if (DateTime.now().day != lastRestart.day) {
+      LastRestartStorage.save();
+
       for (final Task task in tasks) {
         task.completed = false;
         Repository.update(task);
       }
-      tasks.sort((a, b) => a.compareTo(b));
     }
 
+    tasks.sort((a, b) => a.compareTo(b));
     notify();
   }
 
