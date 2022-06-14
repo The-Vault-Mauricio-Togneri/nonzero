@@ -8,11 +8,11 @@ enum Priority {
   Color get color {
     switch (this) {
       case Priority.high:
-        return const Color(0xFFABCF81);
+        return const Color(0xFFabcf81);
       case Priority.medium:
-        return const Color(0xFFECC081);
+        return const Color(0xFFecc081);
       case Priority.low:
-        return const Color(0xFFFA928D);
+        return const Color(0xFFfa928d);
     }
   }
 

@@ -2,81 +2,121 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class BaseLocalized {
-  String get dialogLoadingApplying;
+  String get appName;
 
-  String get dialogLoadingLoading;
+  String get buttonCancel;
 
-  String get dialogLoadingSaving;
+  String get buttonOk;
 
-  String get dialogLoadingSearching;
+  String get confirmationDeleteTask;
 
-  String get dialogLoadingUpdating;
+  String get fieldCantBeEmpty;
 
-  String get formErrorEmpty;
+  String get optionDelete;
 
-  String get loginButtonLogin;
+  String get optionDone;
 
-  String get loginFieldEmail;
+  String get optionNotDone;
 
-  String get loginFieldPassword;
+  String get optionUpdate;
+
+  String get taskButtonAdd;
+
+  String get taskButtonUpdate;
+
+  String get taskFieldName;
+
+  String get taskTitleNew;
+
+  String get taskTitleUpdate;
 }
 
 class ENLocalized extends BaseLocalized {
   @override
-  String get dialogLoadingApplying => 'Applying…';
+  String get appName => 'Non Zero';
 
   @override
-  String get dialogLoadingLoading => 'Loading…';
+  String get buttonCancel => 'Cancel';
 
   @override
-  String get dialogLoadingSaving => 'Saving…';
+  String get buttonOk => 'Ok';
 
   @override
-  String get dialogLoadingSearching => 'Searching…';
+  String get confirmationDeleteTask => 'Delete task?';
 
   @override
-  String get dialogLoadingUpdating => 'Updating…';
+  String get fieldCantBeEmpty => "can't be empty";
 
   @override
-  String get formErrorEmpty => 'Please enter some text';
+  String get optionDelete => 'Delete';
 
   @override
-  String get loginButtonLogin => 'Login';
+  String get optionDone => 'Done';
 
   @override
-  String get loginFieldEmail => 'Email';
+  String get optionNotDone => 'Not done';
 
   @override
-  String get loginFieldPassword => 'Password';
+  String get optionUpdate => 'Update';
+
+  @override
+  String get taskButtonAdd => 'Add';
+
+  @override
+  String get taskButtonUpdate => 'Update';
+
+  @override
+  String get taskFieldName => 'Name';
+
+  @override
+  String get taskTitleNew => 'New task';
+
+  @override
+  String get taskTitleUpdate => 'Update task';
 }
 
 class ESLocalized extends BaseLocalized {
   @override
-  String get dialogLoadingApplying => 'Paramétrage en cours…';
+  String get appName => 'Non Zero';
 
   @override
-  String get dialogLoadingLoading => 'Un instant...';
+  String get buttonCancel => 'Canceler';
 
   @override
-  String get dialogLoadingSaving => 'Sauvegarde en cours…';
+  String get buttonOk => 'Ok';
 
   @override
-  String get dialogLoadingSearching => 'Recherche…';
+  String get confirmationDeleteTask => '¿Elimiar tarea?';
 
   @override
-  String get dialogLoadingUpdating => 'Mise à jour…';
+  String get fieldCantBeEmpty => 'no puede esta vacío';
 
   @override
-  String get formErrorEmpty => 'Ce champs ne peut être vide';
+  String get optionDelete => 'Eliminar';
 
   @override
-  String get loginButtonLogin => 'Se connecter';
+  String get optionDone => 'Completada';
 
   @override
-  String get loginFieldEmail => 'Email';
+  String get optionNotDone => 'No completada';
 
   @override
-  String get loginFieldPassword => 'Mot de passe';
+  String get optionUpdate => 'Actualizar';
+
+  @override
+  String get taskButtonAdd => 'Agregar';
+
+  @override
+  String get taskButtonUpdate => 'Actualizar';
+
+  @override
+  String get taskFieldName => 'Nombre';
+
+  @override
+  String get taskTitleNew => 'Nueva tarea';
+
+  @override
+  String get taskTitleUpdate => 'Actualizar tarea';
 }
 
 class Localized {

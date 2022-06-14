@@ -1,11 +1,16 @@
 {
-    "dialog.loading.applying": "Paramétrage en cours…",
-    "dialog.loading.loading": "Un instant...",
-    "dialog.loading.saving": "Sauvegarde en cours…",
-    "dialog.loading.searching": "Recherche…",
-    "dialog.loading.updating": "Mise à jour…",
-    "form.error.empty": "Ce champs ne peut être vide",
-    "login.button.login": "Se connecter",
-    "login.field.email": "Email",
-    "login.field.password": "Mot de passe"
+    "app.name": "Non Zero",
+    "button.cancel": "Canceler",
+    "button.ok": "Ok",
+    "confirmation.deleteTask": "¿Elimiar tarea?",
+    "field.cantBeEmpty": "no puede esta vacío",
+    "option.delete": "Eliminar",
+    "option.done": "Completada",
+    "option.notDone": "No completada",
+    "option.update": "Actualizar",
+    "task.button.add": "Agregar",
+    "task.button.update": "Actualizar",
+    "task.field.name": "Nombre",
+    "task.title.new": "Nueva tarea",
+    "task.title.update": "Actualizar tarea"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/routes.dart';
 
 class ConfirmationDialog {
@@ -15,14 +16,14 @@ class ConfirmationDialog {
           actions: [
             TextButton(
               onPressed: Routes.pop,
-              child: Text('Cancel'.toUpperCase()),
+              child: Text(Localized.get.buttonCancel.toUpperCase()),
             ),
             TextButton(
               onPressed: () {
                 Routes.pop(true);
                 callback?.call();
               },
-              child: Text('Ok'.toUpperCase()),
+              child: Text(Localized.get.buttonOk.toUpperCase()),
             ),
           ],
         );

@@ -1,6 +1,7 @@
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
 import 'package:nonzero/models/task.dart';
+import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/services/routes.dart';
@@ -24,7 +25,7 @@ class TaskScreen extends StatelessWidget {
         builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: Label(
-              text: state.hasTask ? 'Update task' : 'New task',
+              text: state.hasTask ? Localized.get.taskTitleUpdate : Localized.get.taskTitleNew,
               color: Palette.white,
               size: 16,
             ),
@@ -67,7 +68,7 @@ class Fields extends StatelessWidget {
         child: Column(
           children: [
             CustomFormField(
-              label: 'Name',
+              label: Localized.get.taskFieldName,
               autofocus: true,
               controller: state.nameController,
               inputType: TextInputType.text,
@@ -138,7 +139,7 @@ class Buttons extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: CustomButton(
         onPressed: state.onSubmit,
-        text: state.hasTask ? 'Update' : 'Add',
+        text: state.hasTask ? Localized.get.taskButtonUpdate : Localized.get.taskButtonAdd,
       ),
     );
   }

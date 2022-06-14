@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nonzero/services/localizations.dart';
 
 class CustomFormField extends StatelessWidget {
   final String label;
@@ -55,7 +56,7 @@ class CustomFormField extends StatelessWidget {
       ),
       validator: (value) {
         if (!canBeEmpty && (value == null || value.isEmpty)) {
-          return "$label can't be empty";
+          return '$label ${Localized.get.fieldCantBeEmpty}';
         }
         return null;
       },

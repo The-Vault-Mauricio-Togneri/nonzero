@@ -1,11 +1,16 @@
 {
-    "dialog.loading.applying": "Applying…",
-    "dialog.loading.loading": "Loading…",
-    "dialog.loading.saving": "Saving…",
-    "dialog.loading.searching": "Searching…",
-    "dialog.loading.updating": "Updating…",
-    "form.error.empty": "Please enter some text",
-    "login.button.login": "Login",
-    "login.field.email": "Email",
-    "login.field.password": "Password"
+    "app.name": "Non Zero",
+    "button.cancel": "Cancel",
+    "button.ok": "Ok",
+    "confirmation.deleteTask": "Delete task?",
+    "field.cantBeEmpty": "can't be empty",
+    "option.delete": "Delete",
+    "option.done": "Done",
+    "option.notDone": "Not done",
+    "option.update": "Update",
+    "task.button.add": "Add",
+    "task.button.update": "Update",
+    "task.field.name": "Name",
+    "task.title.new": "New task",
+    "task.title.update": "Update task"
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nonzero/types/priority.dart';
 
 class Task implements Comparable<Task> {
@@ -6,6 +7,11 @@ class Task implements Comparable<Task> {
   final Priority priority;
   bool completed;
 
+  static const String FIELD_ID = 'id';
+  static const String FIELD_NAME = 'name';
+  static const String FIELD_PRIORITY = 'priority';
+  static const String FIELD_COMPLETED = 'completed';
+
   Task({
     required this.id,
     required this.name,
@@ -13,10 +19,21 @@ class Task implements Comparable<Task> {
     required this.completed,
   });
 
+  factory Task.fromDocument(QueryDocumentSnapshot<Map<String, dynamic>> document) {
+    final map = document.data();
+
+    return Task(
+      id: document.id,
+      name: map[FIELD_NAME],
+      priority: Priority.parse(map[FIELD_PRIORITY]),
+      completed: map[FIELD_COMPLETED] as bool,
+    );
+  }
+
   Map<String, dynamic> get document => <String, dynamic>{
-        'name': name,
-        'priority': priority.name,
-        'completed': completed,
+        FIELD_NAME: name,
+        FIELD_PRIORITY: priority.name,
+        FIELD_COMPLETED: completed,
       };
 
   void toggle() => completed = !completed;

@@ -4,6 +4,7 @@ import 'package:nonzero/dialogs/confirmation_dialog.dart';
 import 'package:nonzero/dialogs/options_dialog.dart';
 import 'package:nonzero/models/task.dart';
 import 'package:nonzero/screens/task_screen.dart';
+import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/services/routes.dart';
@@ -22,8 +23,8 @@ class MainScreen extends StatelessWidget {
         state: state,
         builder: (context, state) => Scaffold(
           appBar: AppBar(
-            title: const Label(
-              text: 'Non Zero',
+            title: Label(
+              text: Localized.get.appName,
               color: Palette.white,
               size: 16,
             ),
@@ -118,7 +119,7 @@ class TaskEntry extends StatelessWidget {
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
           return ConfirmationDialog.show(
-            message: 'Delete task?',
+            message: Localized.get.confirmationDeleteTask,
           );
         } else {
           return true;
@@ -215,17 +216,17 @@ class MainState extends BaseState {
   void onOptionsSelected(Task task) {
     OptionsDialog.show(options: [
       Option(
-        text: task.completed ? 'Not done' : 'Done',
+        text: task.completed ? Localized.get.optionNotDone : Localized.get.optionDone,
         callback: () => onTaskSelected(task),
       ),
       Option(
-        text: 'Update',
+        text: Localized.get.optionUpdate,
         callback: () => onUpdateTask(task),
       ),
       Option(
-        text: 'Delete',
+        text: Localized.get.optionDelete,
         callback: () => ConfirmationDialog.show(
-          message: 'Delete task?',
+          message: Localized.get.confirmationDeleteTask,
           callback: () => onTaskDeleted(task),
         ),
       ),
