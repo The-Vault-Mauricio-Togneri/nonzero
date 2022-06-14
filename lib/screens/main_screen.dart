@@ -1,8 +1,9 @@
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
 import 'package:nonzero/dialogs/confirmation_dialog.dart';
+import 'package:nonzero/dialogs/options_dialog.dart';
 import 'package:nonzero/models/task.dart';
-import 'package:nonzero/screens/edit_screen.dart';
+import 'package:nonzero/screens/task_screen.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/services/routes.dart';
@@ -97,10 +98,10 @@ class TaskEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: UniqueKey(),
-      background: const DismissibleBackground(
+      background: DismissibleBackground(
         color: Colors.green,
         alignment: Alignment.centerLeft,
-        icon: Icons.check,
+        icon: task.completed ? Icons.undo : Icons.check,
       ),
       secondaryBackground: const DismissibleBackground(
         color: Colors.red,
@@ -117,7 +118,6 @@ class TaskEntry extends StatelessWidget {
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
           return ConfirmationDialog.show(
-            context: context,
             message: 'Delete task?',
           );
         } else {
@@ -131,6 +131,7 @@ class TaskEntry extends StatelessWidget {
           color: Palette.transparent,
           child: InkWell(
             onTap: () => state.onTaskSelected(task),
+            onLongPress: () => state.onOptionsSelected(task),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 17, 12, 17),
               child: Label(
@@ -211,6 +212,26 @@ class MainState extends BaseState {
     notify();
   }
 
+  void onOptionsSelected(Task task) {
+    OptionsDialog.show(options: [
+      Option(
+        text: task.completed ? 'Not done' : 'Done',
+        callback: () => onTaskSelected(task),
+      ),
+      Option(
+        text: 'Update',
+        callback: () => onUpdateTask(task),
+      ),
+      Option(
+        text: 'Delete',
+        callback: () => ConfirmationDialog.show(
+          message: 'Delete task?',
+          callback: () => onTaskDeleted(task),
+        ),
+      ),
+    ]);
+  }
+
   void onTaskDeleted(Task task) {
     tasks.remove(task);
     Repository.delete(task);
@@ -219,7 +240,12 @@ class MainState extends BaseState {
   }
 
   Future onAddTask() async {
-    await Routes.push(EditScreen.instance());
+    await Routes.push(TaskScreen.instance());
+    load();
+  }
+
+  Future onUpdateTask(Task task) async {
+    await Routes.push(TaskScreen.instance(task));
     load();
   }
 }

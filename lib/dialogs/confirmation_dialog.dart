@@ -3,12 +3,12 @@ import 'package:nonzero/services/routes.dart';
 
 class ConfirmationDialog {
   static Future<bool?> show({
-    required BuildContext context,
     required String message,
     VoidCallback? callback,
   }) {
     return showDialog(
-      context: context,
+      context: Routes.context(),
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           content: Text(message),

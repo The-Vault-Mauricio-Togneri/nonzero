@@ -9,22 +9,22 @@ import 'package:nonzero/widgets/custom_button.dart';
 import 'package:nonzero/widgets/custom_form_field.dart';
 import 'package:nonzero/widgets/label.dart';
 
-class EditScreen extends StatelessWidget {
-  final EditState state;
+class TaskScreen extends StatelessWidget {
+  final TaskState state;
 
-  const EditScreen(this.state);
+  const TaskScreen(this.state);
 
-  static FadeRoute instance([Task? task]) => FadeRoute(EditScreen(EditState(task)));
+  static FadeRoute instance([Task? task]) => FadeRoute(TaskScreen(TaskState(task)));
 
   @override
   Widget build(BuildContext context) {
     return LightStatusBar(
-      child: StateProvider<EditState>(
+      child: StateProvider<TaskState>(
         state: state,
         builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: Label(
-              text: state.hasTask ? 'Edit task' : 'New task',
+              text: state.hasTask ? 'Update task' : 'New task',
               color: Palette.white,
               size: 16,
             ),
@@ -37,7 +37,7 @@ class EditScreen extends StatelessWidget {
 }
 
 class Content extends StatelessWidget {
-  final EditState state;
+  final TaskState state;
 
   const Content(this.state);
 
@@ -54,7 +54,7 @@ class Content extends StatelessWidget {
 }
 
 class Fields extends StatelessWidget {
-  final EditState state;
+  final TaskState state;
 
   const Fields(this.state);
 
@@ -95,7 +95,7 @@ class Fields extends StatelessWidget {
 }
 
 class PrioritySelector extends StatelessWidget {
-  final EditState state;
+  final TaskState state;
   final Priority priority;
 
   const PrioritySelector({
@@ -128,7 +128,7 @@ class PrioritySelector extends StatelessWidget {
 }
 
 class Buttons extends StatelessWidget {
-  final EditState state;
+  final TaskState state;
 
   const Buttons(this.state, {super.key});
 
@@ -138,19 +138,24 @@ class Buttons extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: CustomButton(
         onPressed: state.onSubmit,
-        text: state.hasTask ? 'Edit' : 'Add',
+        text: state.hasTask ? 'Update' : 'Add',
       ),
     );
   }
 }
 
-class EditState extends BaseState {
+class TaskState extends BaseState {
   final Task? task;
   Priority priority = Priority.high;
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  EditState(this.task);
+  TaskState(this.task) {
+    if (task != null) {
+      nameController.text = task!.name;
+      priority = task!.priority;
+    }
+  }
 
   bool get hasTask => task != null;
 
@@ -163,14 +168,25 @@ class EditState extends BaseState {
     if (formKey.currentState!.validate()) {
       Keyboard.hide(Routes.context());
 
-      final Task task = await Repository.add(Task(
-        id: '',
-        name: nameController.text.trim(),
-        priority: priority,
-        completed: false,
-      ));
+      if (task != null) {
+        final Task updatedTask = Task(
+          id: task!.id,
+          name: nameController.text.trim(),
+          priority: priority,
+          completed: task!.completed,
+        );
 
-      Routes.pop(task);
+        await Repository.update(updatedTask);
+        Routes.pop(updatedTask);
+      } else {
+        final Task addedTask = await Repository.add(Task(
+          id: '',
+          name: nameController.text.trim(),
+          priority: priority,
+          completed: false,
+        ));
+        Routes.pop(addedTask);
+      }
     }
   }
 }
