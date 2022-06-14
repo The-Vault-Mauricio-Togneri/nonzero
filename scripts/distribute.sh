@@ -2,7 +2,7 @@
 
 set -e
 
-export FIREBASE_TOKEN="1//09YnM4v6IIZ7ZCgYIARAAGAkSNwF-L9IrMoHjsUzNDkR_QekDg9fo7SF9Dct07YYqrcnxvHZi95R-ajokc8WXjC3gkYbimC7U1BE"
+export FIREBASE_TOKEN="1//03Sndls5DItcACgYIARAAGAMSNwF-L9Ir4GA6oeaFoH9P4wuJU6Qow0RZ13jKTPYfU-qs5Z2jHjX9AiWO-wtpW4cvJWrCpNfGns8"
 
 flutter clean
 flutter pub get
