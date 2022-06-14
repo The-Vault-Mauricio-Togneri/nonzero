@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.4.0"
+  dalocale:
+    dependency: "direct dev"
+    description:
+      name: dalocale
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.1"
   ffi:
     dependency: transitive
     description:

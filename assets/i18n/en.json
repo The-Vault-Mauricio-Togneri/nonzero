@@ -1,0 +1,11 @@
+{
+    "dialog.loading.applying": "Applying…",
+    "dialog.loading.loading": "Loading…",
+    "dialog.loading.saving": "Saving…",
+    "dialog.loading.searching": "Searching…",
+    "dialog.loading.updating": "Updating…",
+    "form.error.empty": "Please enter some text",
+    "login.button.login": "Login",
+    "login.field.email": "Email",
+    "login.field.password": "Password"
+}

@@ -1,0 +1,11 @@
+{
+    "dialog.loading.applying": "Paramétrage en cours…",
+    "dialog.loading.loading": "Un instant...",
+    "dialog.loading.saving": "Sauvegarde en cours…",
+    "dialog.loading.searching": "Recherche…",
+    "dialog.loading.updating": "Mise à jour…",
+    "form.error.empty": "Ce champs ne peut être vide",
+    "login.button.login": "Se connecter",
+    "login.field.email": "Email",
+    "login.field.password": "Mot de passe"
+}
