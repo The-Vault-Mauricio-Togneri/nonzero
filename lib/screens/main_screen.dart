@@ -49,7 +49,7 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return StateProvider<MainState>(
       state: state,
-      builder: (context, state) => state.tasks.isEmpty ? const Waiting() : TaskList(state),
+      builder: (context, state) => state.hasTasks ? (state.tasks.isEmpty ? const NoTasks() : TaskList(state)) : const Waiting(),
     );
   }
 }
@@ -65,6 +65,20 @@ class Waiting extends StatelessWidget {
   }
 }
 
+class NoTasks extends StatelessWidget {
+  const NoTasks();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Label(
+        text: Localized.get.listEmpty,
+        color: Palette.black,
+      ),
+    );
+  }
+}
+
 class TaskList extends StatelessWidget {
   final MainState state;
 
@@ -72,15 +86,18 @@ class TaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: state.tasks.length,
-      itemBuilder: (context, index) => TaskEntry(
-        state: state,
-        task: state.tasks[index],
-      ),
-      separatorBuilder: (context, index) => const HorizontalDivider(
-        height: 0.1,
-        color: Palette.black,
+    return RefreshIndicator(
+      onRefresh: state.load,
+      child: ListView.separated(
+        itemCount: state.tasks.length,
+        itemBuilder: (context, index) => TaskEntry(
+          state: state,
+          task: state.tasks[index],
+        ),
+        separatorBuilder: (context, index) => const HorizontalDivider(
+          height: 0.1,
+          color: Palette.black,
+        ),
       ),
     );
   }
@@ -179,37 +196,41 @@ class DismissibleBackground extends StatelessWidget {
 }
 
 class MainState extends BaseState {
-  final List<Task> tasks = [];
+  List<Task>? _tasks;
 
   MainState() {
     load();
   }
 
+  List<Task> get tasks => _tasks!;
+
+  bool get hasTasks => _tasks != null;
+
   Future load() async {
-    tasks.clear();
+    _tasks = null;
     notify();
 
-    tasks.addAll(await Repository.tasks());
+    _tasks = await Repository.tasks();
 
     final DateTime lastRestart = await LastRestartStorage.load();
 
     if (DateTime.now().day != lastRestart.day) {
       LastRestartStorage.save();
 
-      for (final Task task in tasks) {
+      for (final Task task in _tasks!) {
         task.completed = false;
         Repository.update(task);
       }
     }
 
-    tasks.sort((a, b) => a.compareTo(b));
+    _tasks!.sort((a, b) => a.compareTo(b));
     notify();
   }
 
   void onTaskSelected(Task task) {
     task.toggle();
     Repository.update(task);
-    tasks.sort((a, b) => a.compareTo(b));
+    _tasks!.sort((a, b) => a.compareTo(b));
     notify();
   }
 
@@ -234,9 +255,9 @@ class MainState extends BaseState {
   }
 
   void onTaskDeleted(Task task) {
-    tasks.remove(task);
+    _tasks!.remove(task);
     Repository.delete(task);
-    tasks.sort((a, b) => a.compareTo(b));
+    _tasks!.sort((a, b) => a.compareTo(b));
     notify();
   }
 

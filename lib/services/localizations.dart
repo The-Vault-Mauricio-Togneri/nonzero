@@ -10,7 +10,11 @@ abstract class BaseLocalized {
 
   String get confirmationDeleteTask;
 
+  String get connectionSignIn;
+
   String get fieldCantBeEmpty;
+
+  String get listEmpty;
 
   String get optionDelete;
 
@@ -51,7 +55,13 @@ class ENLocalized extends BaseLocalized {
   String get confirmationDeleteTask => 'Delete task?';
 
   @override
+  String get connectionSignIn => 'Sign in';
+
+  @override
   String get fieldCantBeEmpty => "can't be empty";
+
+  @override
+  String get listEmpty => 'No tasks';
 
   @override
   String get optionDelete => 'Delete';
@@ -104,7 +114,13 @@ class ESLocalized extends BaseLocalized {
   String get confirmationDeleteTask => '¿Elimiar tarea?';
 
   @override
+  String get connectionSignIn => 'Conectarse';
+
+  @override
   String get fieldCantBeEmpty => 'no puede esta vacío';
+
+  @override
+  String get listEmpty => 'Sin tareas';
 
   @override
   String get optionDelete => 'Eliminar';

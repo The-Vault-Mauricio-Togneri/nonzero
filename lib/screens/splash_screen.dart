@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nonzero/screens/main_screen.dart';
+import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/routes.dart';
 import 'package:nonzero/widgets/custom_button.dart';
 
@@ -35,7 +36,7 @@ class SignInButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 100),
         child: CustomButton(
-          text: 'Sign in',
+          text: Localized.get.connectionSignIn,
           onPressed: state.onSignIn,
         ),
       ),
