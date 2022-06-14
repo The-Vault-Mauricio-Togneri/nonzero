@@ -45,7 +45,6 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const VBox(30),
         Fields(state),
         const Spacer(),
         Buttons(state),
@@ -64,15 +63,64 @@ class Fields extends StatelessWidget {
     return Form(
       key: state.formKey,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
         child: Column(
           children: [
             CustomFormField(
               label: 'Name',
+              autofocus: true,
               controller: state.nameController,
               inputType: TextInputType.text,
             ),
+            const VBox(15),
+            PrioritySelector(
+              state: state,
+              priority: Priority.high,
+            ),
+            const VBox(10),
+            PrioritySelector(
+              state: state,
+              priority: Priority.medium,
+            ),
+            const VBox(10),
+            PrioritySelector(
+              state: state,
+              priority: Priority.low,
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class PrioritySelector extends StatelessWidget {
+  final EditState state;
+  final Priority priority;
+
+  const PrioritySelector({
+    required this.state,
+    required this.priority,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: (state.priority == priority) ? priority.color : Palette.lightGrey,
+      child: Material(
+        color: Palette.transparent,
+        child: InkWell(
+          onTap: () => state.onSetPriority(priority),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Center(
+              child: Label(
+                text: priority.name,
+                color: Palette.white,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -98,12 +146,18 @@ class Buttons extends StatelessWidget {
 
 class EditState extends BaseState {
   final Task? task;
+  Priority priority = Priority.high;
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   EditState(this.task);
 
   bool get hasTask => task != null;
+
+  void onSetPriority(Priority newPriority) {
+    priority = newPriority;
+    notify();
+  }
 
   Future onSubmit() async {
     if (formKey.currentState!.validate()) {
@@ -112,7 +166,7 @@ class EditState extends BaseState {
       final Task task = await Repository.add(Task(
         id: '',
         name: nameController.text.trim(),
-        priority: Priority.high,
+        priority: priority,
         completed: false,
       ));
 

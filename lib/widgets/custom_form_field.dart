@@ -8,6 +8,7 @@ class CustomFormField extends StatelessWidget {
   final bool canBeEmpty;
   final bool enabled;
   final TextAlign textAlign;
+  final bool autofocus;
   final VoidCallback? onPressed;
   final String? suffixText;
   final String? inputValidator;
@@ -20,6 +21,7 @@ class CustomFormField extends StatelessWidget {
     this.canBeEmpty = false,
     this.enabled = true,
     this.textAlign = TextAlign.start,
+    this.autofocus = false,
     this.onPressed,
     this.suffixText,
     this.inputValidator,
@@ -33,6 +35,7 @@ class CustomFormField extends StatelessWidget {
       controller: controller,
       readOnly: !enabled,
       onTap: onPressed,
+      autofocus: autofocus,
       obscureText: isPassword,
       keyboardType: inputType,
       textCapitalization: TextCapitalization.sentences,
