@@ -241,12 +241,18 @@ class MainState extends BaseState {
   }
 
   Future onAddTask() async {
-    await Routes.push(TaskScreen.instance());
-    load();
+    final bool? result = await Routes.push<bool?>(TaskScreen.instance());
+
+    if ((result != null) && result) {
+      load();
+    }
   }
 
   Future onUpdateTask(Task task) async {
-    await Routes.push(TaskScreen.instance(task));
-    load();
+    final bool? result = await Routes.push<bool?>(TaskScreen.instance(task));
+
+    if ((result != null) && result) {
+      load();
+    }
   }
 }

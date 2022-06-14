@@ -15,7 +15,7 @@ class TaskScreen extends StatelessWidget {
 
   const TaskScreen(this.state);
 
-  static FadeRoute instance([Task? task]) => FadeRoute(TaskScreen(TaskState(task)));
+  static FadeRoute<bool?> instance([Task? task]) => FadeRoute(TaskScreen(TaskState(task)));
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,10 @@ class TaskScreen extends StatelessWidget {
               text: state.hasTask ? Localized.get.taskTitleUpdate : Localized.get.taskTitleNew,
               color: Palette.white,
               size: 16,
+            ),
+            leading: IconButton(
+              onPressed: () => Routes.pop(false),
+              icon: const Icon(Icons.arrow_back),
             ),
           ),
           body: Content(state),
@@ -74,20 +78,25 @@ class Fields extends StatelessWidget {
               inputType: TextInputType.text,
             ),
             const VBox(15),
-            PrioritySelector(
-              state: state,
-              priority: Priority.high,
-            ),
-            const VBox(10),
-            PrioritySelector(
-              state: state,
-              priority: Priority.medium,
-            ),
-            const VBox(10),
-            PrioritySelector(
-              state: state,
-              priority: Priority.low,
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                PrioritySelector(
+                  state: state,
+                  priority: Priority.high,
+                ),
+                const HBox(10),
+                PrioritySelector(
+                  state: state,
+                  priority: Priority.medium,
+                ),
+                const HBox(10),
+                PrioritySelector(
+                  state: state,
+                  priority: Priority.low,
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -106,19 +115,20 @@ class PrioritySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: (state.priority == priority) ? priority.color : Palette.lightGrey,
-      child: Material(
-        color: Palette.transparent,
-        child: InkWell(
-          onTap: () => state.onSetPriority(priority),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Label(
-                text: priority.name,
-                color: Palette.white,
+    return Expanded(
+      child: Container(
+        color: (state.priority == priority) ? priority.color : Palette.lightGrey,
+        child: Material(
+          color: Palette.transparent,
+          child: InkWell(
+            onTap: () => state.onSetPriority(priority),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Label(
+                  text: priority.name[0].toUpperCase() + priority.name.substring(1),
+                  color: Palette.white,
+                ),
               ),
             ),
           ),
@@ -178,15 +188,15 @@ class TaskState extends BaseState {
         );
 
         await Repository.update(updatedTask);
-        Routes.pop(updatedTask);
+        Routes.pop(true);
       } else {
-        final Task addedTask = await Repository.add(Task(
+        await Repository.add(Task(
           id: '',
           name: nameController.text.trim(),
           priority: priority,
           completed: false,
         ));
-        Routes.pop(addedTask);
+        Routes.pop(true);
       }
     }
   }
