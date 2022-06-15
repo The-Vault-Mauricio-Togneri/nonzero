@@ -9,6 +9,7 @@ import 'package:nonzero/types/priority.dart';
 import 'package:nonzero/widgets/custom_button.dart';
 import 'package:nonzero/widgets/custom_form_field.dart';
 import 'package:nonzero/widgets/label.dart';
+import 'package:nonzero/widgets/screen_container.dart';
 
 class TaskScreen extends StatelessWidget {
   final TaskState state;
@@ -20,21 +21,23 @@ class TaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LightStatusBar(
-      child: StateProvider<TaskState>(
-        state: state,
-        builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            title: Label(
-              text: state.hasTask ? Localized.get.taskTitleUpdate : Localized.get.taskTitleNew,
-              color: Palette.white,
-              size: 16,
+      child: ScreenContainer(
+        child: StateProvider<TaskState>(
+          state: state,
+          builder: (context, state) => Scaffold(
+            appBar: AppBar(
+              title: Label(
+                text: state.hasTask ? Localized.get.taskTitleUpdate : Localized.get.taskTitleNew,
+                color: Palette.white,
+                size: 16,
+              ),
+              leading: IconButton(
+                onPressed: () => Routes.pop(false),
+                icon: const Icon(Icons.arrow_back),
+              ),
             ),
-            leading: IconButton(
-              onPressed: () => Routes.pop(false),
-              icon: const Icon(Icons.arrow_back),
-            ),
+            body: Content(state),
           ),
-          body: Content(state),
         ),
       ),
     );

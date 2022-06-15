@@ -8,6 +8,7 @@ import 'package:nonzero/screens/main_screen.dart';
 import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/routes.dart';
 import 'package:nonzero/widgets/custom_button.dart';
+import 'package:nonzero/widgets/screen_container.dart';
 
 class ConnectionScreen extends StatelessWidget {
   final SplashState state = SplashState();
@@ -17,10 +18,12 @@ class ConnectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DarkStatusBar(
-      child: StateProvider<SplashState>(
-        state: state,
-        builder: (context, state) => Scaffold(
-          body: body(),
+      child: ScreenContainer(
+        child: StateProvider<SplashState>(
+          state: state,
+          builder: (context, state) => Scaffold(
+            body: body(),
+          ),
         ),
       ),
     );

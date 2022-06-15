@@ -10,6 +10,7 @@ import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/services/routes.dart';
 import 'package:nonzero/widgets/label.dart';
+import 'package:nonzero/widgets/screen_container.dart';
 
 class MainScreen extends StatelessWidget {
   final MainState state = MainState();
@@ -19,26 +20,28 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LightStatusBar(
-      child: StateProvider<MainState>(
-        state: state,
-        builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            title: Label(
-              text: Localized.get.appName,
-              color: Palette.white,
-              size: 16,
-            ),
-            actions: [
-              IconButton(
-                onPressed: state.markAllAsNotCompleted,
-                icon: const Icon(Icons.restart_alt_rounded),
+      child: ScreenContainer(
+        child: StateProvider<MainState>(
+          state: state,
+          builder: (context, state) => Scaffold(
+            appBar: AppBar(
+              title: Label(
+                text: Localized.get.appName,
+                color: Palette.white,
+                size: 16,
               ),
-            ],
-          ),
-          body: Content(state),
-          floatingActionButton: FloatingActionButton(
-            onPressed: state.onAddTask,
-            child: const Icon(Icons.add),
+              actions: [
+                IconButton(
+                  onPressed: state.markAllAsNotCompleted,
+                  icon: const Icon(Icons.restart_alt_rounded),
+                ),
+              ],
+            ),
+            body: Content(state),
+            floatingActionButton: FloatingActionButton(
+              onPressed: state.onAddTask,
+              child: const Icon(Icons.add),
+            ),
           ),
         ),
       ),
