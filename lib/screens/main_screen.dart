@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
 import 'package:nonzero/dialogs/confirmation_dialog.dart';
@@ -10,7 +9,6 @@ import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/repository.dart';
 import 'package:nonzero/services/routes.dart';
-import 'package:nonzero/storage/last_restart_storage.dart';
 import 'package:nonzero/widgets/label.dart';
 
 class MainScreen extends StatelessWidget {
@@ -30,6 +28,12 @@ class MainScreen extends StatelessWidget {
               color: Palette.white,
               size: 16,
             ),
+            actions: [
+              IconButton(
+                onPressed: state.markAllAsNotCompleted,
+                icon: const Icon(Icons.restart_alt_rounded),
+              ),
+            ],
           ),
           body: Content(state),
           floatingActionButton: FloatingActionButton(
@@ -206,24 +210,26 @@ class MainState extends BaseState {
   void onLoad() => subscription ??= Repository.listen(onTasksLoaded);
 
   @override
-  void onDestroy() => subscription?.cancel();
+  void onDestroy() {
+    subscription?.cancel();
+    subscription = null;
+  }
 
   Future onTasksLoaded(List<Task> tasks) async {
     _tasks = tasks;
-
-    final DateTime lastRestart = await LastRestartStorage.load();
-
-    if (DateTime.now().day != lastRestart.day) {
-      LastRestartStorage.save();
-
-      for (final Task task in _tasks!) {
-        task.completed = false;
-        Repository.update(task);
-      }
-    }
-
     _tasks!.sort((a, b) => a.compareTo(b));
     notify();
+  }
+
+  void markAllAsNotCompleted() {
+    onDestroy();
+
+    for (final Task task in _tasks!) {
+      task.completed = false;
+      Repository.update(task);
+    }
+
+    onLoad();
   }
 
   void onTaskSelected(Task task) {
