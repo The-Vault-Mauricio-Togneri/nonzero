@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nonzero/screens/connection_screen.dart';
-import 'package:nonzero/screens/main_screen.dart';
 import 'package:nonzero/services/localizations.dart';
 import 'package:nonzero/services/palette.dart';
 import 'package:nonzero/services/routes.dart';
@@ -27,7 +25,7 @@ class NonZero extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: Localized.locales,
-      home: (FirebaseAuth.instance.currentUser == null) ? ConnectionScreen() : MainScreen(),
+      home: ConnectionScreen(),
     );
   }
 }

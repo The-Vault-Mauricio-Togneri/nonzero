@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dafluta/dafluta.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +20,20 @@ class ConnectionScreen extends StatelessWidget {
       child: StateProvider<SplashState>(
         state: state,
         builder: (context, state) => Scaffold(
-          body: state.showLoading ? const Waiting() : SignInButton(state),
+          body: body(),
         ),
       ),
     );
+  }
+
+  Widget body() {
+    if (state.showSignIn) {
+      return SignInButton(state);
+    } else if (state.showLoading) {
+      return const Waiting();
+    } else {
+      return const Empty();
+    }
   }
 }
 
@@ -57,9 +69,28 @@ class Waiting extends StatelessWidget {
 
 class SplashState extends BaseState {
   bool showLoading = false;
+  bool showSignIn = false;
+
+  @override
+  Future onLoad() async {
+    final Stream<User?> stream = FirebaseAuth.instance.authStateChanges();
+    StreamSubscription? subscription;
+    subscription = stream.listen((user) {
+      subscription?.cancel();
+
+      if (user == null) {
+        showLoading = false;
+        showSignIn = true;
+        notify();
+      } else {
+        openMainScreen();
+      }
+    });
+  }
 
   Future onSignIn() async {
     showLoading = true;
+    showSignIn = false;
     notify();
 
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -71,6 +102,8 @@ class SplashState extends BaseState {
     );
 
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Routes.pushReplacement(MainScreen.instance());
+    openMainScreen();
   }
+
+  void openMainScreen() => Routes.pushReplacement(MainScreen.instance());
 }

@@ -87,7 +87,7 @@ class TaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: state.load,
+      onRefresh: state.onLoad,
       child: ListView.separated(
         itemCount: state.tasks.length,
         itemBuilder: (context, index) => TaskEntry(
@@ -198,15 +198,12 @@ class DismissibleBackground extends StatelessWidget {
 class MainState extends BaseState {
   List<Task>? _tasks;
 
-  MainState() {
-    load();
-  }
-
   List<Task> get tasks => _tasks!;
 
   bool get hasTasks => _tasks != null;
 
-  Future load() async {
+  @override
+  Future onLoad() async {
     _tasks = null;
     notify();
 
@@ -265,7 +262,7 @@ class MainState extends BaseState {
     final bool? result = await Routes.push<bool?>(TaskScreen.instance());
 
     if ((result != null) && result) {
-      load();
+      onLoad();
     }
   }
 
@@ -273,7 +270,7 @@ class MainState extends BaseState {
     final bool? result = await Routes.push<bool?>(TaskScreen.instance(task));
 
     if ((result != null) && result) {
-      load();
+      onLoad();
     }
   }
 }

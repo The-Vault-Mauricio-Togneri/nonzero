@@ -161,7 +161,10 @@ class TaskState extends BaseState {
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  TaskState(this.task) {
+  TaskState(this.task);
+
+  @override
+  void onLoad() {
     if (task != null) {
       nameController.text = task!.name;
       priority = task!.priority;
