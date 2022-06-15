@@ -56,7 +56,7 @@ packages:
       name: dafluta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.0"
   dalocale:
     dependency: "direct dev"
     description:

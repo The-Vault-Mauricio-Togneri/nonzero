@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dafluta/dafluta.dart';
 import 'package:flutter/material.dart';
 import 'package:nonzero/dialogs/confirmation_dialog.dart';
@@ -86,18 +88,15 @@ class TaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: state.onLoad,
-      child: ListView.separated(
-        itemCount: state.tasks.length,
-        itemBuilder: (context, index) => TaskEntry(
-          state: state,
-          task: state.tasks[index],
-        ),
-        separatorBuilder: (context, index) => const HorizontalDivider(
-          height: 0.1,
-          color: Palette.black,
-        ),
+    return ListView.separated(
+      itemCount: state.tasks.length,
+      itemBuilder: (context, index) => TaskEntry(
+        state: state,
+        task: state.tasks[index],
+      ),
+      separatorBuilder: (context, index) => const HorizontalDivider(
+        height: 0.1,
+        color: Palette.black,
       ),
     );
   }
@@ -197,17 +196,20 @@ class DismissibleBackground extends StatelessWidget {
 
 class MainState extends BaseState {
   List<Task>? _tasks;
+  StreamSubscription? subscription;
 
   List<Task> get tasks => _tasks!;
 
   bool get hasTasks => _tasks != null;
 
   @override
-  Future onLoad() async {
-    _tasks = null;
-    notify();
+  void onLoad() => subscription ??= Repository.listen(onTasksLoaded);
 
-    _tasks = await Repository.tasks();
+  @override
+  void onDestroy() => subscription?.cancel();
+
+  Future onTasksLoaded(List<Task> tasks) async {
+    _tasks = tasks;
 
     final DateTime lastRestart = await LastRestartStorage.load();
 
@@ -253,24 +255,11 @@ class MainState extends BaseState {
 
   void onTaskDeleted(Task task) {
     _tasks!.remove(task);
-    Repository.delete(task);
-    _tasks!.sort((a, b) => a.compareTo(b));
     notify();
+    Repository.delete(task);
   }
 
-  Future onAddTask() async {
-    final bool? result = await Routes.push<bool?>(TaskScreen.instance());
+  void onAddTask() => Routes.push(TaskScreen.instance());
 
-    if ((result != null) && result) {
-      onLoad();
-    }
-  }
-
-  Future onUpdateTask(Task task) async {
-    final bool? result = await Routes.push<bool?>(TaskScreen.instance(task));
-
-    if ((result != null) && result) {
-      onLoad();
-    }
-  }
+  void onUpdateTask(Task task) => Routes.push(TaskScreen.instance(task));
 }

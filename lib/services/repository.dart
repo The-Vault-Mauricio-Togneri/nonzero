@@ -1,17 +1,20 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nonzero/models/task.dart';
 
 class Repository {
-  static Future<List<Task>> tasks() async {
-    final List<Task> tasks = [];
-    final result = await collection().get();
+  static StreamSubscription listen(Function(List<Task> tasks) callback) {
+    return Repository.collection().snapshots().listen((event) async {
+      final List<Task> tasks = [];
+      final result = await collection().get();
 
-    for (final document in result.docs) {
-      tasks.add(Task.fromDocument(document));
-    }
+      for (final document in result.docs) {
+        tasks.add(Task.fromDocument(document));
+      }
 
-    return tasks;
+      callback(tasks);
+    });
   }
 
   static Future<Task> add(Task task) async {
