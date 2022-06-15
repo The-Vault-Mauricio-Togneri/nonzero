@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dafluta/dafluta.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -96,16 +95,22 @@ class SplashState extends BaseState {
     showSignIn = false;
     notify();
 
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    openMainScreen();
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      openMainScreen();
+    } catch (e) {
+      showLoading = false;
+      showSignIn = true;
+      notify();
+    }
   }
 
   void openMainScreen() => Routes.pushReplacement(MainScreen.instance());

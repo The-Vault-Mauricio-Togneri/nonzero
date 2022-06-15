@@ -2,7 +2,8 @@
 
 set -e
 
-export FIREBASE_TOKEN="1//03Sndls5DItcACgYIARAAGAMSNwF-L9Ir4GA6oeaFoH9P4wuJU6Qow0RZ13jKTPYfU-qs5Z2jHjX9AiWO-wtpW4cvJWrCpNfGns8"
+# ./gradlew appDistributionLogin
+export FIREBASE_TOKEN="1//03862p2TyUaRuCgYIARAAGAMSNwF-L9Irzx68Zyau_jp5IPMzSphXQrahNaXUvR5JQvnoUiJEaRvLiGg6qozBC4c2zJ0o_HNLtpI"
 
 flutter clean
 flutter pub get

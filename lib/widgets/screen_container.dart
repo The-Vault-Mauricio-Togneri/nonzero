@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:dafluta/dafluta.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,16 +10,7 @@ class ScreenContainer extends StatelessWidget {
   bool get hasSmallScreen => (defaultTargetPlatform == TargetPlatform.android) || (defaultTargetPlatform == TargetPlatform.iOS);
 
   @override
-  Widget build(BuildContext context) {
-    return DarkStatusBar(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: hasSmallScreen ? SmallScreenContainer(child) : BigScreenContainer(child, Colors.black),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => hasSmallScreen ? SmallScreenContainer(child) : BigScreenContainer(child, Colors.black);
 }
 
 class BigScreenContainer extends StatelessWidget {

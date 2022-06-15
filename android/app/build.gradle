@@ -52,6 +52,12 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+       debug {
+            storeFile file('debug.keystore')
+        }
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.debug
