@@ -1,0 +1,21 @@
+{
+    "app.name": "Non Zero",
+    "button.cancel": "Canceler",
+    "button.ok": "Ok",
+    "confirmation.deleteTask": "¿Elimiar tarea?",
+    "connection.signIn": "Conectarse",
+    "field.cantBeEmpty": "no puede esta vacío",
+    "list.empty": "Sin tareas",
+    "option.delete": "Eliminar",
+    "option.done": "Completada",
+    "option.notDone": "No completada",
+    "option.update": "Actualizar",
+    "priority.high": "Alta",
+    "priority.low": "Baja",
+    "priority.medium": "Media",
+    "task.button.add": "Agregar",
+    "task.button.update": "Actualizar",
+    "task.field.name": "Nombre",
+    "task.title.new": "Nueva tarea",
+    "task.title.update": "Actualizar tarea"
+}
