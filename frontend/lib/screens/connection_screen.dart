@@ -106,7 +106,6 @@ class SplashState extends BaseState {
       await FirebaseAuth.instance.signInWithCredential(credential);
       openMainScreen();
     } catch (e) {
-      print(e);
       showLoading = false;
       showSignIn = true;
       notify();

@@ -21,8 +21,8 @@ const RESOURCES = {
 "firebase-messaging-sw.js": "fcb671b618e3fc37fdd4b37b865f44e7",
 "favicon.ico": "f1f8d4b05985e568e6e76a7e66ad2c52",
 "version.json": "74b914d7a4941bd8369915a74680c0ae",
-"index.html": "05beb218b6517446717526fed6d5293f",
-"/": "05beb218b6517446717526fed6d5293f"
+"index.html": "0f4ccc2f9d9392dbfa4980ffc78c521a",
+"/": "0f4ccc2f9d9392dbfa4980ffc78c521a"
 };
 
 // The application shell files that are downloaded before a service worker can
